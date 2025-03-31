@@ -17,8 +17,8 @@ HEADERS = {
 #proxies
 
 proxies= {
-     "http":"https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
-     "https":"https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
+     "http": os.getenv("PROXY"),
+     "https":  os.getenv("PROXY"),
 }
 
 # Keep track of already displayed movies
