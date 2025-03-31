@@ -17,8 +17,8 @@ HEADERS = {
 #proxies
 
 proxies= {
-    "https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
-    # "https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
+     "http":"https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
+     "https":"https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
 }
 
 # Keep track of already displayed movies
@@ -107,7 +107,7 @@ async def main():
     while True:
         html = fetch_amazon_page()
         if not html:
-            await asyncio.sleep(5)
+            await asyncio.sleep(2)
             continue
 
         movies = extract_movie_data(html)
@@ -130,7 +130,7 @@ async def main():
                 print(text)
                 await send_telegram_message(text)
 
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
 
 if __name__ == "__main__":
     asyncio.run(main())
