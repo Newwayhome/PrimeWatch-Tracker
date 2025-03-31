@@ -14,6 +14,13 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
 }
 
+#proxies
+
+proxies= {
+    "https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
+    # "https://KeHNW228zLMx2DFwJ7jBCAmu:VRmxsZYEqskYbaFhbwqyy6A8@in-del.prod.surfshark.com:443",
+}
+
 # Keep track of already displayed movies
 seen_movies = set()
 
@@ -36,7 +43,7 @@ async def send_telegram_message(text):
 
 def fetch_amazon_page():
     """Fetch the Amazon movie page HTML."""
-    response = requests.get(AMAZON_URL, headers=HEADERS)
+    response = requests.get(AMAZON_URL, headers=HEADERS, proxies=proxies)
     return response.text if response.status_code == 200 else None
 
 def extract_movie_data(html):
@@ -75,7 +82,7 @@ def convert_to_prime_url(redirect_link):
 
 def fetch_audio_languages(prime_video_url):
     """Extract available audio languages from the Prime Video page."""
-    response = requests.get(prime_video_url, headers=HEADERS)
+    response = requests.get(prime_video_url, headers=HEADERS, proxies=proxies)
     if response.status_code != 200:
         return "Unknown"
 
