@@ -14,7 +14,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
 }
 
-#proxies
+# Proxies
 
 proxies= {
      "http": os.getenv("PROXY"),
@@ -36,7 +36,7 @@ async def send_telegram_message(text):
             chat_id=CHANNEL_ID,
             text=text,
             parse_mode="Markdown",
-            disable_web_page_preview=True
+            disable_web_page_preview=False
         )
     except Exception as e:
         print(f"Error sending message: {e}")
@@ -80,25 +80,30 @@ def convert_to_prime_url(redirect_link):
 
     return None
 
-def fetch_audio_languages(prime_video_url):
-    """Extract available audio languages from the Prime Video page."""
+def fetch_audio_languages_and_poster(prime_video_url):
+    """Extract available audio languages and poster image from the Prime Video page."""
     response = requests.get(prime_video_url, headers=HEADERS, proxies=proxies)
     if response.status_code != 200:
-        return "Unknown"
+        return "Unknown", "Unknown"
 
     soup = BeautifulSoup(response.text, "html.parser")
     
     # Find all metadata rows
     metadata_rows = soup.find_all("dl", {"data-testid": "metadata-row"})
+    audio_languages = "Unknown"
 
     for row in metadata_rows:
         dt_tag = row.find("dt")
         if dt_tag and "Audio languages" in dt_tag.text:
             dd_tag = row.find("dd")
             if dd_tag:
-                return dd_tag.text.strip()
+                audio_languages = dd_tag.text.strip()
 
-    return "Unknown"
+    # Extract movie poster
+    poster_tag = soup.find("meta", property="og:image")
+    poster_url = poster_tag["content"] if poster_tag else "Unknown"
+
+    return audio_languages, poster_url
 
 async def main():
     """Main async function with proper event loop management."""
@@ -121,12 +126,15 @@ async def main():
                 
                 if movie_key not in seen_movies:
                     seen_movies.add(movie_key)
-                    audio_languages = fetch_audio_languages(prime_video_link)
-                    new_movies.append((movie_name, movie_year, prime_video_link, audio_languages))
+                    audio_languages, poster_url = fetch_audio_languages_and_poster(prime_video_link)
+                    new_movies.append((movie_name, movie_year, prime_video_link, audio_languages, poster_url))
         
         if new_movies:
-            for movie_name, movie_year, prime_video_link, audio_languages in new_movies:
-                text = f"🎬 *New Movie:* {movie_name} ({movie_year})\n🔗 [Watch on Prime Video]({prime_video_link})\n🎧 *Audio:* {audio_languages}"
+            for movie_name, movie_year, prime_video_link, audio_languages, poster_url in new_movies:
+                text = (f"🎬 *New Movie:* {movie_name} ({movie_year})\n"
+                        f"🔗 [Watch on Prime Video]({prime_video_link})\n"
+                        f"🎧 *Audio:* {audio_languages}\n"
+                        f"🖼️ *Poster:* [View Poster]({poster_url})")
                 print(text)
                 await send_telegram_message(text)
 
