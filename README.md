@@ -9,7 +9,7 @@ A Telegram bot that scrapes new movie releases from Amazon Prime India and sends
 - Scrapes latest movies from Amazon Prime India.
 - Extracts movie titles, release year, Prime Video URL, and audio languages.
 - Sends formatted updates to a Telegram channel.
-- Runs continuously using Railway + UptimeRobot.
+- Runs continuously using Railway
 
 ---
 
