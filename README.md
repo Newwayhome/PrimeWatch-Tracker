@@ -27,3 +27,14 @@ A Telegram bot that scrapes new movie releases from Amazon Prime India and sends
    ```bash
    git clone https://github.com/yourusername/amazon-movie-bot.git
    cd amazon-movie-bot
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+3. Set environment variables (optional if hardcoded):
+   - TELEGRAM_BOT_TOKEN
+   - CHANNEL_ID
+4. Run the bot:
+   ```bash
+   python bot.py
+
+
