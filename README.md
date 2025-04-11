@@ -16,7 +16,7 @@ A Telegram bot that scrapes new movie releases from Amazon Prime India and sends
 ## 🛠 Tech Stack
 
 - Python 3
-- `requests`, `beautifulsoup4`, `python-telegram-bot`
+- `requests`, `beautifulsoup4`, `python-telegram-bot`, `aiohttp`
 - Hosted on [Railway](https://railway.app)
 
 ---
