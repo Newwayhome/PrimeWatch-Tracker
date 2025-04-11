@@ -9,14 +9,12 @@ from telegram import Bot
 import os
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional, Set
-import json
 
-# Configure logging
+# Configure logging to console only (no file handlers)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("bot.log"),
         logging.StreamHandler()
     ]
 )
@@ -39,7 +37,7 @@ proxies = {
 # Keep track of already displayed movies
 seen_movies = set()
 
-# Request state tracking
+# Request state tracking (in-memory only)
 request_states = {
     "amazon_page": {"status": "idle", "last_request": None, "success_count": 0, "error_count": 0},
     "prime_video": {"status": "idle", "last_request": None, "success_count": 0, "error_count": 0},
@@ -67,10 +65,6 @@ async def update_request_state(service: str, status: str, success: bool = True):
         request_states[service]["error_count"] += 1
     
     logger.info(f"Request state updated for {service}: {status} (success: {success})")
-    
-    # Save state to file for persistence
-    with open("request_states.json", "w") as f:
-        json.dump(request_states, f, indent=2)
 
 async def send_telegram_message(text: str) -> bool:
     """Send a message to the Telegram channel with state tracking."""
